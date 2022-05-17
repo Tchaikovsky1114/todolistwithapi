@@ -1,5 +1,5 @@
 // 배포때 확인
-// import './index.css'
+import './index.css'
 import './app.js'
 
 const application = document.querySelector('#app-contents')
