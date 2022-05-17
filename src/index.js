@@ -1,6 +1,6 @@
 
 import './app.js'
-import axios from 'axios'
+
 
 const application = document.querySelector('#app-contents')
 const loadingEl = document.querySelector('#loading')
