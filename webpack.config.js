@@ -1,7 +1,8 @@
-import path from 'path'
-import HtmlPlugin from 'html-webpack-plugin'
-import CopyPlugin from 'copy-webpack-plugin'
-
+const path = require('path');
+const HtmlPlugin = require('html-webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
   mode: 'production',
@@ -11,13 +12,31 @@ module.exports = {
     filename: 'main.js',
     clean: true
   },
+  resolve:{
+    modules: ['node_modules'],
+    extensions: ['.js']
+  },
   module: {
     rules: {
       test: /\.js$/,
-      use:[
-        'babel-loader' 
-    ]
-  }
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            [
+              '@babel/preset-env',
+              {
+                targets: '> 1%, not dead',
+                useBuiltIns: 'usage',
+                corejs: {version: '3.16'}
+              }
+            ]
+          ]
+        }
+      },
+      exclude: /(node_modules)/ 
+    }
+    
   },
   module: {
     rules: [
@@ -34,17 +53,25 @@ module.exports = {
       }
     ]
   },
+  optimization:{
+    minimize:true,
+    minimizer: [
+      new CssMinimizerPlugin(),
+      new TerserPlugin({
+        terserOptions: {
+          compress: {
+            drop_console:true
+          }
+        }
+      })
+    ],
+  },
 
   plugins: [
     new HtmlPlugin({
       template: './index.html'
     }),
-    new CopyPlugin({
-      patterns: [
-        { from: 'static' }
-      ]
-    }),
-
+    new CompressionPlugin()
   ],
 
   devServer: {
