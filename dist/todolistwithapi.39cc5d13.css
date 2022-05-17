@@ -1,0 +1,213 @@
+body{
+  
+  background-color: #aaa;
+  color:white;
+}
+
+
+
+
+.todos-count-wrapper{
+  position: absolute;
+  right: 10px;
+ 
+}
+h1{
+  font-size: 34px;
+}
+
+
+
+#todo-form{
+  
+  min-width: 550px;
+  position:absolute;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  gap:20px;
+  top:25%;
+  left:50%;
+  padding: 1rem;
+  transform: translate(-50%,-50%);
+  border-bottom: 1px solid white;
+  animation: fade-in 2s;
+}
+#todo-form label{
+  
+  font-size: 28px;
+  
+}
+
+#todo-form input{
+  width: 50%;
+  height: 45px;
+  border-radius: 10px;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: transparent;
+  
+  border: 1px solid teal;
+  color: white;
+}
+
+#todo-form input:focus{
+  outline: 3px solid orangered;
+  border:0;
+  font-weight: bold;
+}
+#todo-form input:focus::placeholder{
+  color: orangered;
+  
+}
+#todo-form input::placeholder{
+  
+  color:teal;
+  font-size:22px;
+  text-align: center;
+  
+}
+
+#todo-form button{
+  width: 100px;
+  height: 30px;
+  color:white;
+  border: 1px solid teal;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+#todo-form button:hover{
+  
+  background-color: teal;
+  font-weight: bold;
+}
+/* app contents */
+#app-contents{
+  width: 550px;
+  margin:20rem auto;
+  animation: slow-up 1s;
+  
+}
+.todo{
+  
+  list-style-type: none;
+  padding: 1rem;
+  font-size: 18px;
+  cursor: pointer;
+}
+.todo:hover{
+  color:royalblue;
+}
+.todo span{
+  font-size: 14px;
+}
+
+#loading{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);  
+  font-size: 40px;
+}
+
+.todos--button-wrapper{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.todos--button-wrapper button{
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 5px;
+  border:0;
+  background-color: #fff;
+  box-shadow: 2px 2px 2px #fff;
+}
+
+
+
+.todos--button-wrapper button:first-of-type{
+  margin-right: 1rem;
+  color: orangered;
+  font-weight: bold;
+ }
+
+.todos--button-wrapper button:first-of-type:hover{
+  color:white;
+  background-color: orangered;
+  box-shadow: 2px 2px 2px orange;
+}
+
+.todos--button-wrapper button:last-of-type{
+  color:royalblue;
+  background-color: white;
+  box-shadow: 2px 2px 2px blue;
+}
+
+
+.todos--button-wrapper button:last-of-type:hover{
+  color:white;
+  background-color: royalblue;
+  box-shadow: 2px 2px 2px blue;
+}
+
+
+.todos--remote-button-group{
+  position:fixed;
+  top:30%;
+  display: flex;
+  flex-direction: column;
+  left:1rem;
+  gap:20px;
+  padding: 2rem;
+  background-color: indianred;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.todos--remote-button-group button{
+  cursor: pointer;
+  padding: 1rem;
+  border:0;
+  border-radius: 10px;
+  margin: .2rem;
+}
+.todos--remote-button-group button:hover{
+  color:white;
+  background-color: indianred;
+  border: 1px solid orange;
+}
+
+@keyframes fade-in{
+  0%{
+    opacity: 0;
+    color: #aaa;
+  }
+  50%{
+    opacity: 0.5;
+    color: #ccc;
+  }
+  100%{
+    opacity: 1;
+    color: #fff;
+  }
+}
+
+@keyframes slow-up{
+ from{
+  opacity:0;
+  transform:translateY(2000px) scale(0.2);
+  color: #bbb;
+ }
+ 
+ to{
+   opacity:1;
+   transform: translateY(0) scale(1.0);
+ }
+}
+
+
+
+/*# sourceMappingURL=/todolistwithapi.39cc5d13.css.map */

@@ -1,6 +1,6 @@
-// 배포때 확인
+import  regeneratorRuntime  from  "regenerator-runtime" ;
 import  './app.js'
-
+import './main.css'
 const application = document.querySelector('#app-contents')
 const loadingEl = document.querySelector('#loading')
 
