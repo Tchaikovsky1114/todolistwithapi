@@ -1,6 +1,6 @@
 // 배포때 확인
 import './index.css'
-import app from './app.js'
+import  './app.js'
 
 const application = document.querySelector('#app-contents')
 const loadingEl = document.querySelector('#loading')
