@@ -2,7 +2,7 @@
   "name": "kdt2-js-m2",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
@@ -36,11 +36,11 @@
   "dependencies": {
     "@babel/runtime": "^7.17.9",
     "@babel/runtime-corejs3": "^7.17.9",
-    "axios": "^0.27.2"
+    "axios": "^0.27.2",
+    "mini-css-extract-plugin": "^2.6.0"
   },
   "browserslist": [
     "> 1%",
     "last 2 versions"
   ]
-  
 }

@@ -1,10 +1,10 @@
 const path = require('path')
 const HtmlPlugin = require('html-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
-
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
   mode: 'production',
-  entry: 'src/index.js',
+  entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'main.js',
@@ -26,7 +26,7 @@ module.exports = {
         // js에서 css를 해석할 수 있게 해주는 css-loader
         // 해석된 내용을 삽입해주는 style-loader
         use:[
-          'style-loader',
+          MiniCssExtractPlugin.loader,
           'css-loader',
           'postcss-loader',
           'sass-loader',
@@ -44,7 +44,9 @@ module.exports = {
         { from: 'static' }
       ]
     }),
-    
+    new MiniCssExtractPlugin({
+      filename: 'index.css'
+    })
   ],
 
   devServer: {
