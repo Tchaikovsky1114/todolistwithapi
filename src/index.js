@@ -1,4 +1,5 @@
-
+// 배포때 확인
+import './index.css'
 
 
 const application = document.querySelector('#app-contents')
@@ -239,4 +240,26 @@ function loadButtons() {
   deleteButtonEls.forEach((deleteButtonEl) => deleteButtonEl.addEventListener('click', deleteTodo))
 }
 
+const showDoneListButton = document.querySelector('#todos--remote-show-donelist-button')
+const showProgressingListButton = document.querySelector('#todos--remote-show-progressinglist-button')
 
+async function onToggleList(bool){
+  const {
+    data
+  } = await axios({
+    url: 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json',
+      'apikey': 'FcKdtJs202204',
+      'username': 'KimMyungSeong'
+    },
+  })
+  const filteredFalseData = data.filter(item => item.done === bool)
+  console.log(filteredFalseData);
+  todoList.innerHTML = '';
+  renderTodos(filteredFalseData)
+}
+
+showDoneListButton.addEventListener('click',()=>onToggleList(true))
+showProgressingListButton.addEventListener('click',()=>onToggleList(false))

@@ -154,10 +154,31 @@ h1{
 }
 
 
+.todos--remote-button-group{
+  position:fixed;
+  top:30%;
+  display: flex;
+  flex-direction: column;
+  left:2rem;
+  gap:20px;
+  padding: 2rem;
+  background-color: indianred;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
 
-
-
-
+.todos--remote-button-group button{
+  cursor: pointer;
+  padding: 1rem;
+  border:0;
+  border-radius: 10px;
+  margin: .2rem;
+}
+.todos--remote-button-group button:hover{
+  color:white;
+  background-color: indianred;
+  border: 1px solid orange;
+}
 
 @keyframes fade-in{
   0%{

@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>MUSTODO</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css">
-  <link rel="stylesheet" href="./src/index.css">
+  <!-- <link rel="stylesheet" href="index.css"> -->
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script src="src/index.js" type="module"></script>
+  <!-- <script src="src/index.js" type="module"></script> -->
 </head>
 <body>
   <div class="todos-count-wrapper"><span class="todos-count"></span>개 대기중...</div>
@@ -20,10 +20,11 @@
   <button>약속하기</button>
   </div>
 </form>
-  <div>
-  <button>완료목록 삭제</button>
-  <button>진행 중인 목록</button>
-  <button>완료된 목록</button>
+  <div class="todos--remote-button-group">
+    <h3>remote controller</h3>
+  <button id="todos--remote-remove-donelist-button">완료목록 삭제</button>
+  <button id="todos--remote-show-progressinglist-button">진행 중인 목록</button>
+  <button id="todos--remote-show-donelist-button">완료된 목록</button>
   </div>
 <div id="loading">Loading.....</div>
   <div id="app-contents">
