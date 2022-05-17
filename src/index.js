@@ -1,5 +1,4 @@
 
-import './app.js'
 
 
 const application = document.querySelector('#app-contents')
