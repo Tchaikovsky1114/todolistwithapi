@@ -1,6 +1,7 @@
-const path = require('path')
-const HtmlPlugin = require('html-webpack-plugin')
-const CopyPlugin = require('copy-webpack-plugin')
+import path from 'path'
+import HtmlPlugin from 'html-webpack-plugin'
+import CopyPlugin from 'copy-webpack-plugin'
+
 
 module.exports = {
   mode: 'production',
