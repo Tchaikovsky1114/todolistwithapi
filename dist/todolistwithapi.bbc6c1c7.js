@@ -874,7 +874,7 @@ try {
   }
 }
 
-},{}],"app.js":[function(require,module,exports) {
+},{}],"app.mjs":[function(require,module,exports) {
 console.log('app is here');
 },{}],"../Users/owner/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
@@ -953,7 +953,7 @@ module.hot.accept(reloadCSS);
 
 var _regeneratorRuntime = _interopRequireDefault(require("regenerator-runtime"));
 
-require("./app.js");
+require("./app.mjs");
 
 require("./main.css");
 
@@ -1386,7 +1386,7 @@ showDoneListButton.addEventListener('click', function () {
 showProgressingListButton.addEventListener('click', function () {
   return onToggleList(false);
 });
-},{"regenerator-runtime":"node_modules/regenerator-runtime/runtime.js","./app.js":"app.js","./main.css":"main.css"}],"../Users/owner/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"regenerator-runtime":"node_modules/regenerator-runtime/runtime.js","./app.mjs":"app.mjs","./main.css":"main.css"}],"../Users/owner/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
