@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlPlugin = require('html-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
+
 module.exports = {
   mode: 'production',
   entry: 'src/index.js',
@@ -42,7 +43,8 @@ module.exports = {
       patterns: [
         { from: 'static' }
       ]
-    })
+    }),
+    
   ],
 
   devServer: {
