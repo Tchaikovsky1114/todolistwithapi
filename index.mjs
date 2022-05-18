@@ -59,25 +59,55 @@ async function readTodo() {
   console.log(data);
 }
 
+// throw Error
+function sameTodoValidation(array,value) {
+  array.forEach(title =>{
+  if(value === title){
+    throw '똑같은 Todo가 존재합니다!'
+  }})
+}
 //POST 
-async function createTodo(todos) {
+async function createTodo(todosValue) {
   loading = true;
   orderNumber++;
   toggleLoading()
-  await axios({
+
+  const {
+    data
+  } = await axios({
     url: 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
-    method: 'POST',
+    method: 'GET',
     headers: {
       'content-type': 'application/json',
       'apikey': 'FcKdtJs202204',
       'username': 'KimMyungSeong'
     },
-    data: {
-      "title": todos,
-      "order": orderNumber
-    }
   })
-  readTodo()
+  const todosTitleArray = [];
+  data.forEach(todos => todosTitleArray.push(todos.title))
+  
+
+  try{
+    sameTodoValidation(todosTitleArray,todosValue);
+    await axios({
+      url: 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'apikey': 'FcKdtJs202204',
+        'username': 'KimMyungSeong'
+      },
+      data: {
+        "title": todosValue,
+        "order": orderNumber
+      }
+    })
+    readTodo()
+  }catch(e){
+    alert(e);
+  }
+
+  
 }
 
 // DELETE
@@ -309,13 +339,38 @@ const showAllListButton = document.querySelector('#todos--remote-show-Alllist-bu
 function showAllList(e){
   readTodo()
 }
+const deleteDoneListButton = document.querySelector('#todos--remote-remove-donelist-button');
 
+async function deleteDoneList(e){
+  const {data} = await axios({
+    url: 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json',
+      'apikey': 'FcKdtJs202204',
+      'username': 'KimMyungSeong'
+    },
+  })
+  const doneTodo = data.filter(data => data.done === true);
+  const todosIdArray = []
+  doneTodo.map(item => todosIdArray.push(item.id));
+  todosIdArray.forEach(todoId => axios({
+    url: `https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/${todoId}`,
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json',
+      'apikey': 'FcKdtJs202204',
+      'username': 'KimMyungSeong'
+    },
+  }))
+  setTimeout(()=>{readTodo()},1000) 
+}
 function loadButtons() {
   const deleteButtonEls = document.querySelectorAll('.todos--delete-button');
   const todosHandleEls = [...document.querySelectorAll('.todos--button-wrapper')];
   const updateButtonEls = [...document.querySelectorAll('.todos--update-button')];
   showAllListButton.addEventListener('click',showAllList)
-  
+  deleteDoneListButton.addEventListener('click',deleteDoneList)
   deleteButtonEls.forEach((deleteButtonEl) => deleteButtonEl.addEventListener('click', deleteTodo))
   updateButtonEls.forEach((updateButtonEl) => updateButtonEl.addEventListener('click',changeTodoTitle))
 }

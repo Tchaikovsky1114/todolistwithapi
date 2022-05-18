@@ -200,6 +200,16 @@ h1{
   background-color: indianred;
   border: 1px solid orange;
 }
+.todos--remote-button-group button:first-of-type{
+  background-color: orangered;
+  border: 1px solid red;
+}
+.todos--remote-button-group button:first-of-type:hover{
+  color:  blue;
+  background-color: transparent;
+  border: 1px solid blue;
+}
+
 
 @keyframes fade-in{
   0%{
