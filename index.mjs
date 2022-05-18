@@ -8,6 +8,34 @@ let loading = true;
 let orderNumber = 0;
 
 
+
+const testArray = [];
+
+function pushArray(data){
+  testArray.push(data.map(todo => todo.id));
+}
+
+
+
+ async function getTodo(){
+    await axios({
+    url: 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/',
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json',
+      'apikey': 'FcKdtJs202204',
+      'username': "KimMyungSeong"
+    }
+  })
+}
+
+
+
+
+
+
+
+
 function onFocusPlaceholder() {
   todosInputEl.setAttribute('placeholder', "진짜 무적권 해야 댐!");
 }
@@ -56,7 +84,7 @@ async function readTodo() {
   loading = false;
   toggleLoading()
   countTodos(data)
-  console.log(data);
+  // console.log(data);
 }
 
 // throw Error
@@ -66,6 +94,8 @@ function sameTodoValidation(array,value) {
     throw '똑같은 Todo가 존재합니다!'
   }})
 }
+
+
 //POST 
 async function createTodo(todosValue) {
   loading = true;
@@ -103,6 +133,7 @@ async function createTodo(todosValue) {
       }
     })
     readTodo()
+    console.log(testArray);
   }catch(e){
     alert(e);
   }
@@ -146,7 +177,6 @@ async function deleteTodo(e) {
     }
   })
 
-  
   readTodo()
 }
 
@@ -260,8 +290,6 @@ async function changeTodoTitle(e){
       'username': 'KimMyungSeong'
     },
   })
-  
-    
     let todosTitleArray = [];
     data.map(item => todosTitleArray.push(item.title));
     const todosTitle = e.target.parentNode.parentNode.parentNode.firstChild.nextSibling.textContent;
@@ -273,9 +301,6 @@ async function changeTodoTitle(e){
     document.body.append(updateInputBox);
     onToggleUpdateInput(updateInputBox)
     
-
-
-
   let todosIdArray = [];
   data.map(item => todosIdArray.push(item.id));
 
@@ -285,36 +310,17 @@ async function changeTodoTitle(e){
   let todosDoneArray = [];
   data.map(item => todosDoneArray.push(item.done))
   console.log(todosDoneArray[todosIndex]);
-  //  await axios({
-  //   url: `https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/${todosIdArray[todosIndex]}`,
-  //   method: 'PUT',
-  //   headers: {
-  //     'content-type': 'application/json',
-  //     'apikey': 'FcKdtJs202204',
-  //     'username': "KimMyungSeong",
-  //   },
-  //   data: {
-  //     "title":todosTitle,
-  //     "order":todosOrderArray[todosIndex],
-  //     "done" : !todosDoneArray[todosIndex]
-  //   }
-  // })
-  
+
   readTodo()
   
 }
 
-
-
-
-
-
-async function renderTodos(data) {
+async function renderTodos(data,str="작성") {
   
   const todos = await data.map((todo) => /* html */ `
   <li class="todo">
   <div class="todos--title">${todo.title}</div>
-  <span>(${todo.createdAt.substr(2,2)}-${todo.createdAt.substr(5,2)}-${todo.createdAt.substr(8,2)} ${todo.createdAt.substr(11,2)}:${todo.createdAt.substr(14,2)}분 작성)</span>
+  <span>(${todo.updatedAt.substr(2,2)}-${todo.updatedAt.substr(5,2)}-${todo.updatedAt.substr(8,2)} ${todo.updatedAt.substr(11,2)}:${todo.updatedAt.substr(14,2)}분 ${str})</span>
   <div class="todos--button-wrapper">
   <div>
   <button class="todos--delete-button">삭제하기</button>
@@ -363,7 +369,7 @@ async function deleteDoneList(e){
       'username': 'KimMyungSeong'
     },
   }))
-  setTimeout(()=>{readTodo()},1000) 
+  readTodo()
 }
 function loadButtons() {
   const deleteButtonEls = document.querySelectorAll('.todos--delete-button');
@@ -378,7 +384,7 @@ function loadButtons() {
 const showDoneListButton = document.querySelector('#todos--remote-show-donelist-button')
 const showProgressingListButton = document.querySelector('#todos--remote-show-progressinglist-button')
 
-//sort
+//sort by data.done value
 async function onToggleList(bool){
   const {
     data
@@ -394,7 +400,7 @@ async function onToggleList(bool){
   const filteredFalseData = data.filter(item => item.done === bool)
   console.log(filteredFalseData);
   todoList.innerHTML = '';
-  renderTodos(filteredFalseData)
+  renderTodos(filteredFalseData,"수정")
 }
 
 showDoneListButton.addEventListener('click',()=>onToggleList(true))
