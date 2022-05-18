@@ -230,7 +230,7 @@ async function changeTodoTitle(e){
       'username': 'KimMyungSeong'
     },
   })
-  console.log(e.target);
+  
     
     let todosTitleArray = [];
     data.map(item => todosTitleArray.push(item.title));
@@ -304,13 +304,18 @@ async function renderTodos(data) {
 }
 
 
-readTodo()
 
+const showAllListButton = document.querySelector('#todos--remote-show-Alllist-button');
+function showAllList(e){
+  readTodo()
+}
 
 function loadButtons() {
   const deleteButtonEls = document.querySelectorAll('.todos--delete-button');
   const todosHandleEls = [...document.querySelectorAll('.todos--button-wrapper')];
   const updateButtonEls = [...document.querySelectorAll('.todos--update-button')];
+  showAllListButton.addEventListener('click',showAllList)
+  
   deleteButtonEls.forEach((deleteButtonEl) => deleteButtonEl.addEventListener('click', deleteTodo))
   updateButtonEls.forEach((updateButtonEl) => updateButtonEl.addEventListener('click',changeTodoTitle))
 }
@@ -339,3 +344,7 @@ async function onToggleList(bool){
 
 showDoneListButton.addEventListener('click',()=>onToggleList(true))
 showProgressingListButton.addEventListener('click',()=>onToggleList(false))
+
+
+readTodo()
+

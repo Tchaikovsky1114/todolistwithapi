@@ -1323,7 +1323,6 @@ function _changeTodoTitle() {
           case 2:
             _yield$axios4 = _context5.sent;
             data = _yield$axios4.data;
-            console.log(e.target);
             todosTitleArray = [];
             data.map(function (item) {
               return todosTitleArray.push(item.title);
@@ -1369,7 +1368,7 @@ function _changeTodoTitle() {
 
             readTodo();
 
-          case 23:
+          case 22:
           case "end":
             return _context5.stop();
         }
@@ -1420,7 +1419,11 @@ function _renderTodos() {
   return _renderTodos.apply(this, arguments);
 }
 
-readTodo();
+var showAllListButton = document.querySelector('#todos--remote-show-Alllist-button');
+
+function showAllList(e) {
+  readTodo();
+}
 
 function loadButtons() {
   var deleteButtonEls = document.querySelectorAll('.todos--delete-button');
@@ -1429,6 +1432,7 @@ function loadButtons() {
 
   var updateButtonEls = _toConsumableArray(document.querySelectorAll('.todos--update-button'));
 
+  showAllListButton.addEventListener('click', showAllList);
   deleteButtonEls.forEach(function (deleteButtonEl) {
     return deleteButtonEl.addEventListener('click', deleteTodo);
   });
@@ -1489,6 +1493,7 @@ showDoneListButton.addEventListener('click', function () {
 showProgressingListButton.addEventListener('click', function () {
   return onToggleList(false);
 });
+readTodo();
 },{"regenerator-runtime":"node_modules/regenerator-runtime/runtime.js","./app.mjs":"app.mjs","./main.css":"main.css"}],"../Users/owner/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
