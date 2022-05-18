@@ -1156,21 +1156,20 @@ function _createTodo() {
 
           case 13:
             readTodo();
-            console.log(testArray);
-            _context3.next = 20;
+            _context3.next = 19;
             break;
 
-          case 17:
-            _context3.prev = 17;
+          case 16:
+            _context3.prev = 16;
             _context3.t0 = _context3["catch"](9);
             alert(_context3.t0);
 
-          case 20:
+          case 19:
           case "end":
             return _context3.stop();
         }
       }
-    }, _callee3, null, [[9, 17]]);
+    }, _callee3, null, [[9, 16]]);
   }));
   return _createTodo.apply(this, arguments);
 }
@@ -1249,7 +1248,7 @@ function onAddTodosHandler(e) {
   todosValue = e.target.value;
 }
 
-function onSubmitTodo(e) {
+function onSubmitTodo(e, todosValue) {
   e.preventDefault();
 
   if (todosValue.length < 10) {
@@ -1263,7 +1262,9 @@ function onSubmitTodo(e) {
   todosInputEl.focus();
 }
 
-todoFormEl.addEventListener('submit', onSubmitTodo);
+todoFormEl.addEventListener('submit', function (e) {
+  return onSubmitTodo(e, todosValue);
+});
 todosInputEl.addEventListener('change', onAddTodosHandler);
 todosInputEl.addEventListener('focus', onFocusPlaceholder);
 todosInputEl.addEventListener('blur', onBlurPlaceholder);
@@ -1373,19 +1374,28 @@ function onToggleUpdateInput(elems) {
   }
 }
 
-function changeTodoTitle(_x4) {
-  return _changeTodoTitle.apply(this, arguments);
+var updateValue;
+var updateInputBox = document.querySelector('.todos--update-input-box');
+
+function updateTodo(e) {
+  updateValue = e.target.value;
+  console.log(updateValue);
 }
 
-function _changeTodoTitle() {
-  _changeTodoTitle = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee6(e) {
-    var _yield$axios5, data, todosTitleArray, todosTitle, todosIndex, todoCard, updateInputBox, todosUpdateCancelButton, todosIdArray, todosOrderArray, todosDoneArray;
+function onSubmitUpdateTodo(_x4, _x5) {
+  return _onSubmitUpdateTodo.apply(this, arguments);
+}
+
+function _onSubmitUpdateTodo() {
+  _onSubmitUpdateTodo = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee6(e, todosTitle) {
+    var _yield$axios5, data, todosTitleArray, todosIdArray, todosOrderArray, todosDoneArray, todosIndex;
 
     return _regeneratorRuntime.default.wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
-            _context6.next = 2;
+            e.preventDefault();
+            _context6.next = 3;
             return axios({
               url: 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
               method: 'GET',
@@ -1396,67 +1406,112 @@ function _changeTodoTitle() {
               }
             });
 
-          case 2:
+          case 3:
             _yield$axios5 = _context6.sent;
             data = _yield$axios5.data;
             todosTitleArray = [];
+            todosIdArray = [];
+            todosOrderArray = [];
+            todosDoneArray = [];
             data.map(function (item) {
               return todosTitleArray.push(item.title);
             });
-            todosTitle = e.target.parentNode.parentNode.parentNode.firstChild.nextSibling.textContent;
-            todosIndex = todosTitleArray.findIndex(function (title) {
-              return title === todosTitle;
-            });
-            todoCard = document.querySelectorAll('.todo')[todosIndex];
-            updateInputBox = document.querySelector('.todos--update-input-box');
-            todosUpdateCancelButton = document.querySelector('.todos--update-cancel-button');
-            todosUpdateCancelButton.addEventListener('click', function () {
-              onToggleUpdateInput(updateInputBox, false);
-            });
-            document.body.append(updateInputBox);
-            onToggleUpdateInput(updateInputBox);
-            todosIdArray = [];
             data.map(function (item) {
               return todosIdArray.push(item.id);
             });
-            todosOrderArray = [];
             data.map(function (item) {
               return todosOrderArray.push(item.order);
             });
-            todosDoneArray = [];
             data.map(function (item) {
               return todosDoneArray.push(item.done);
             });
-            console.log(todosDoneArray[todosIndex]);
-            readTodo();
+            todosIndex = todosTitleArray.findIndex(function (title) {
+              return title === todosTitle;
+            });
+            _context6.next = 16;
+            return axios({
+              url: "https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/".concat(todosIdArray[todosIndex]),
+              method: 'PUT',
+              headers: {
+                'content-type': 'application/json',
+                'apikey': 'FcKdtJs202204',
+                'username': "KimMyungSeong"
+              },
+              data: {
+                "title": updateValue,
+                "order": todosOrderArray[todosIndex],
+                "done": !todosDoneArray[todosIndex]
+              }
+            });
 
-          case 22:
+          case 16:
+            readTodo();
+            onToggleUpdateInput(updateInputBox, false);
+
+          case 18:
           case "end":
             return _context6.stop();
         }
       }
     }, _callee6);
   }));
+  return _onSubmitUpdateTodo.apply(this, arguments);
+}
+
+function changeTodoTitle(_x6) {
   return _changeTodoTitle.apply(this, arguments);
 }
 
-function renderTodos(_x5) {
-  return _renderTodos.apply(this, arguments);
-}
-
-function _renderTodos() {
-  _renderTodos = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee7(data) {
-    var str,
-        todos,
-        todoTitles,
-        doneToggleButtons,
-        _args7 = arguments;
+function _changeTodoTitle() {
+  _changeTodoTitle = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee7(e) {
+    var todosTitle, updateInput, todosUpdateCancelButton, updateForm;
     return _regeneratorRuntime.default.wrap(function _callee7$(_context7) {
       while (1) {
         switch (_context7.prev = _context7.next) {
           case 0:
-            str = _args7.length > 1 && _args7[1] !== undefined ? _args7[1] : "작성";
-            _context7.next = 3;
+            todosTitle = e.target.parentNode.parentNode.parentNode.firstChild.nextSibling.textContent; // const todoCard = document.querySelectorAll('.todo')[todosIndex];  
+
+            updateInput = document.querySelector('#todos--update-input');
+            todosUpdateCancelButton = document.querySelector('.todos--update-cancel-button');
+            updateForm = document.querySelector('#todos--update-form');
+            todosUpdateCancelButton.addEventListener('click', function () {
+              onToggleUpdateInput(updateInputBox, false);
+            });
+            updateInput.addEventListener('change', updateTodo);
+            updateForm.addEventListener('submit', function (e) {
+              return onSubmitUpdateTodo(e, todosTitle);
+            });
+            document.body.append(updateInputBox);
+            onToggleUpdateInput(updateInputBox);
+            readTodo();
+
+          case 10:
+          case "end":
+            return _context7.stop();
+        }
+      }
+    }, _callee7);
+  }));
+  return _changeTodoTitle.apply(this, arguments);
+}
+
+function renderTodos(_x7) {
+  return _renderTodos.apply(this, arguments);
+}
+
+function _renderTodos() {
+  _renderTodos = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee8(data) {
+    var str,
+        todos,
+        todoTitles,
+        doneToggleButtons,
+        _args8 = arguments;
+    return _regeneratorRuntime.default.wrap(function _callee8$(_context8) {
+      while (1) {
+        switch (_context8.prev = _context8.next) {
+          case 0:
+            str = _args8.length > 1 && _args8[1] !== undefined ? _args8[1] : "작성";
+            _context8.next = 3;
             return data.map(function (todo) {
               return (
                 /* html */
@@ -1465,7 +1520,7 @@ function _renderTodos() {
             });
 
           case 3:
-            todos = _context7.sent;
+            todos = _context8.sent;
             todoTitles = todos.join('');
             todoList.innerHTML = todoTitles;
             application.append(todoList);
@@ -1478,10 +1533,10 @@ function _renderTodos() {
 
           case 11:
           case "end":
-            return _context7.stop();
+            return _context8.stop();
         }
       }
-    }, _callee7);
+    }, _callee8);
   }));
   return _renderTodos.apply(this, arguments);
 }
@@ -1494,19 +1549,19 @@ function showAllList(e) {
 
 var deleteDoneListButton = document.querySelector('#todos--remote-remove-donelist-button');
 
-function deleteDoneList(_x6) {
+function deleteDoneList(_x8) {
   return _deleteDoneList.apply(this, arguments);
 }
 
 function _deleteDoneList() {
-  _deleteDoneList = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee8(e) {
+  _deleteDoneList = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee9(e) {
     var _yield$axios6, data, doneTodo, todosIdArray;
 
-    return _regeneratorRuntime.default.wrap(function _callee8$(_context8) {
+    return _regeneratorRuntime.default.wrap(function _callee9$(_context9) {
       while (1) {
-        switch (_context8.prev = _context8.next) {
+        switch (_context9.prev = _context9.next) {
           case 0:
-            _context8.next = 2;
+            _context9.next = 2;
             return axios({
               url: 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
               method: 'GET',
@@ -1518,7 +1573,7 @@ function _deleteDoneList() {
             });
 
           case 2:
-            _yield$axios6 = _context8.sent;
+            _yield$axios6 = _context9.sent;
             data = _yield$axios6.data;
             doneTodo = data.filter(function (data) {
               return data.done === true;
@@ -1542,10 +1597,10 @@ function _deleteDoneList() {
 
           case 9:
           case "end":
-            return _context8.stop();
+            return _context9.stop();
         }
       }
-    }, _callee8);
+    }, _callee9);
   }));
   return _deleteDoneList.apply(this, arguments);
 }
@@ -1570,19 +1625,19 @@ function loadButtons() {
 var showDoneListButton = document.querySelector('#todos--remote-show-donelist-button');
 var showProgressingListButton = document.querySelector('#todos--remote-show-progressinglist-button'); //sort by data.done value
 
-function onToggleList(_x7) {
+function onToggleList(_x9) {
   return _onToggleList.apply(this, arguments);
 }
 
 function _onToggleList() {
-  _onToggleList = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee9(bool) {
+  _onToggleList = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee10(bool) {
     var _yield$axios7, data, filteredFalseData;
 
-    return _regeneratorRuntime.default.wrap(function _callee9$(_context9) {
+    return _regeneratorRuntime.default.wrap(function _callee10$(_context10) {
       while (1) {
-        switch (_context9.prev = _context9.next) {
+        switch (_context10.prev = _context10.next) {
           case 0:
-            _context9.next = 2;
+            _context10.next = 2;
             return axios({
               url: 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
               method: 'GET',
@@ -1594,7 +1649,7 @@ function _onToggleList() {
             });
 
           case 2:
-            _yield$axios7 = _context9.sent;
+            _yield$axios7 = _context10.sent;
             data = _yield$axios7.data;
             filteredFalseData = data.filter(function (item) {
               return item.done === bool;
@@ -1605,10 +1660,10 @@ function _onToggleList() {
 
           case 8:
           case "end":
-            return _context9.stop();
+            return _context10.stop();
         }
       }
-    }, _callee9);
+    }, _callee10);
   }));
   return _onToggleList.apply(this, arguments);
 }

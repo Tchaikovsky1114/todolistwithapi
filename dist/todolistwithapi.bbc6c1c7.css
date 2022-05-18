@@ -8,7 +8,7 @@ body{
 
 .todos--update-input-box{
   display: none;
-  position:absolute;
+  position:fixed;
   top:50%;
   left:50%;
   transform: translate(-50%,-50%);
@@ -24,10 +24,24 @@ body{
 }
 
 .todos--update-input-box textarea{
-  width: 220px;
-  height: 80px;
+  padding: 2rem;
+  width: 440px;
+  height: 240px;
+  border-radius: 16px;
+  font-size: 16px;
 }
-
+.todos--update-input-box button{
+  cursor: pointer;
+  border-radius: 5px;
+  padding: .5rem;
+  border: 1px solid red;
+  color: white; 
+  background-color: orangered;
+}
+.todos--update-input-box button:last-of-type{
+  background-color: royalblue;
+  border: 1px solid blue;
+}
 .todos-count-wrapper{
   position: absolute;
   right: 10px;

@@ -133,7 +133,7 @@ async function createTodo(todosValue) {
       }
     })
     readTodo()
-    console.log(testArray);
+  
   }catch(e){
     alert(e);
   }
@@ -190,7 +190,7 @@ function onAddTodosHandler(e) {
   todosValue = e.target.value
 }
 
-function onSubmitTodo(e) {
+function onSubmitTodo(e,todosValue) {
   e.preventDefault();
   if (todosValue.length < 10) {
     alert('누가 목표는 자세히 써야 실천 한다고 하더라고요(10자 이상 입력)')
@@ -204,7 +204,7 @@ function onSubmitTodo(e) {
 
 
 
-todoFormEl.addEventListener('submit', onSubmitTodo)
+todoFormEl.addEventListener('submit',(e) => onSubmitTodo(e,todosValue))
 todosInputEl.addEventListener('change', onAddTodosHandler)
 todosInputEl.addEventListener('focus', onFocusPlaceholder)
 todosInputEl.addEventListener('blur', onBlurPlaceholder)
@@ -247,6 +247,7 @@ async function onToggleDone(e){
   let todosDoneArray = [];
   data.map(item => todosDoneArray.push(item.done))
   console.log(todosDoneArray[todosIndex]);
+
    await axios({
     url: `https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/${todosIdArray[todosIndex]}`,
     method: 'PUT',
@@ -278,9 +279,17 @@ function onToggleUpdateInput(elems,bool=true){
     elems.style.display = 'none';
   }
 }
+let updateValue;
+const updateInputBox = document.querySelector('.todos--update-input-box');
+function updateTodo(e){
+ updateValue = e.target.value
+ console.log(updateValue)
+}
 
-async function changeTodoTitle(e){
-  
+
+
+async function onSubmitUpdateTodo(e,todosTitle){
+  e.preventDefault()
   const {data} = await axios({
     url: 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
     method: 'GET',
@@ -291,29 +300,62 @@ async function changeTodoTitle(e){
     },
   })
     let todosTitleArray = [];
+    let todosIdArray = [];
+    let todosOrderArray = [];
+    let todosDoneArray = [];
     data.map(item => todosTitleArray.push(item.title));
+    data.map(item => todosIdArray.push(item.id));
+    data.map(item => todosOrderArray.push(item.order))
+    data.map(item => todosDoneArray.push(item.done))
+    
+  const todosIndex = todosTitleArray.findIndex(title => title === todosTitle);
+  await axios({
+    url: `https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/${todosIdArray[todosIndex]}`,
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+      'apikey': 'FcKdtJs202204',
+      'username': "KimMyungSeong",
+    },
+    data: {
+      "title":updateValue,
+      "order":todosOrderArray[todosIndex],
+      "done" : !todosDoneArray[todosIndex]
+    }
+  })
+
+  readTodo()
+  onToggleUpdateInput(updateInputBox,false);
+}
+
+
+
+async function changeTodoTitle(e){
+
     const todosTitle = e.target.parentNode.parentNode.parentNode.firstChild.nextSibling.textContent;
-    const todosIndex = todosTitleArray.findIndex(title => title === todosTitle)
-    const todoCard = document.querySelectorAll('.todo')[todosIndex];  
-    const updateInputBox = document.querySelector('.todos--update-input-box');
+    
+    // const todoCard = document.querySelectorAll('.todo')[todosIndex];  
+    const updateInput = document.querySelector('#todos--update-input');
     const todosUpdateCancelButton = document.querySelector('.todos--update-cancel-button')
+    const updateForm = document.querySelector('#todos--update-form')
     todosUpdateCancelButton.addEventListener('click',()=>{onToggleUpdateInput(updateInputBox,false)});
+    updateInput.addEventListener('change',updateTodo)
+    updateForm.addEventListener('submit',(e)=>onSubmitUpdateTodo(e,todosTitle))
     document.body.append(updateInputBox);
     onToggleUpdateInput(updateInputBox)
     
-  let todosIdArray = [];
-  data.map(item => todosIdArray.push(item.id));
+    
 
-  let todosOrderArray = [];
-  data.map(item => todosOrderArray.push(item.order))
-
-  let todosDoneArray = [];
-  data.map(item => todosDoneArray.push(item.done))
-  console.log(todosDoneArray[todosIndex]);
-
-  readTodo()
   
+  readTodo()
 }
+
+
+
+
+
+
+
 
 async function renderTodos(data,str="작성") {
   
@@ -371,6 +413,10 @@ async function deleteDoneList(e){
   }))
   readTodo()
 }
+
+
+
+
 function loadButtons() {
   const deleteButtonEls = document.querySelectorAll('.todos--delete-button');
   const todosHandleEls = [...document.querySelectorAll('.todos--button-wrapper')];
@@ -383,6 +429,12 @@ function loadButtons() {
 
 const showDoneListButton = document.querySelector('#todos--remote-show-donelist-button')
 const showProgressingListButton = document.querySelector('#todos--remote-show-progressinglist-button')
+
+
+
+
+
+
 
 //sort by data.done value
 async function onToggleList(bool){
