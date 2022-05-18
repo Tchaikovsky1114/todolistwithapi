@@ -159,7 +159,7 @@ function countTodoListChildNode() {
   }
 }
 
-
+//PUT (change done property)
 async function onToggleDone(e){
   const {data} = await axios({
     url: 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
@@ -204,6 +204,81 @@ async function onToggleDone(e){
   readTodo()
 }
 
+//PUT change comment
+let showUpdateInput = false;
+
+function onToggleUpdateInput(elems,bool=true){
+  console.log('toggle!');
+  showUpdateInput = bool;
+  if(showUpdateInput){
+    elems.style.display = '';
+    elems.style.display = 'block';
+  }else if(!showUpdateInput){
+    elems.style.display = '';
+    elems.style.display = 'none';
+  }
+}
+
+async function changeTodoTitle(e){
+  
+  const {data} = await axios({
+    url: 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json',
+      'apikey': 'FcKdtJs202204',
+      'username': 'KimMyungSeong'
+    },
+  })
+  console.log(e.target);
+    
+    let todosTitleArray = [];
+    data.map(item => todosTitleArray.push(item.title));
+    const todosTitle = e.target.parentNode.parentNode.parentNode.firstChild.nextSibling.textContent;
+    const todosIndex = todosTitleArray.findIndex(title => title === todosTitle)
+    const todoCard = document.querySelectorAll('.todo')[todosIndex];  
+    const updateInputBox = document.querySelector('.todos--update-input-box');
+    const todosUpdateCancelButton = document.querySelector('.todos--update-cancel-button')
+    todosUpdateCancelButton.addEventListener('click',()=>{onToggleUpdateInput(updateInputBox,false)});
+    document.body.append(updateInputBox);
+    onToggleUpdateInput(updateInputBox)
+    
+
+
+
+  let todosIdArray = [];
+  data.map(item => todosIdArray.push(item.id));
+
+  let todosOrderArray = [];
+  data.map(item => todosOrderArray.push(item.order))
+
+  let todosDoneArray = [];
+  data.map(item => todosDoneArray.push(item.done))
+  console.log(todosDoneArray[todosIndex]);
+  //  await axios({
+  //   url: `https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/${todosIdArray[todosIndex]}`,
+  //   method: 'PUT',
+  //   headers: {
+  //     'content-type': 'application/json',
+  //     'apikey': 'FcKdtJs202204',
+  //     'username': "KimMyungSeong",
+  //   },
+  //   data: {
+  //     "title":todosTitle,
+  //     "order":todosOrderArray[todosIndex],
+  //     "done" : !todosDoneArray[todosIndex]
+  //   }
+  // })
+  
+  readTodo()
+  
+}
+
+
+
+
+
+
 async function renderTodos(data) {
   
   const todos = await data.map((todo) => /* html */ `
@@ -216,7 +291,7 @@ async function renderTodos(data) {
   <button class="todos--update-button">타협하기</button>
   </div>
   </div>
-  <div>${todo.done === false ? "실천 중🔴" : "실천성공!🔵"}<button class='todos--done-toggle-button'>체크</button></div>
+  <div>${todo.done === false ? "노력 중🔴" : "해냈어요!🔵"}<button class='todos--done-toggle-button'>체크</button></div>
   </li>
   `)
   const todoTitles = todos.join('');
@@ -237,11 +312,13 @@ function loadButtons() {
   const todosHandleEls = [...document.querySelectorAll('.todos--button-wrapper')];
   const updateButtonEls = [...document.querySelectorAll('.todos--update-button')];
   deleteButtonEls.forEach((deleteButtonEl) => deleteButtonEl.addEventListener('click', deleteTodo))
+  updateButtonEls.forEach((updateButtonEl) => updateButtonEl.addEventListener('click',changeTodoTitle))
 }
 
 const showDoneListButton = document.querySelector('#todos--remote-show-donelist-button')
 const showProgressingListButton = document.querySelector('#todos--remote-show-progressinglist-button')
 
+//sort
 async function onToggleList(bool){
   const {
     data

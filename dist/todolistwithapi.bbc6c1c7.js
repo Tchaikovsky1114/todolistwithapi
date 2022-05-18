@@ -1199,11 +1199,13 @@ function countTodoListChildNode() {
     EmptyTodosEl.innerHTML = "아무 계획도 없습니다...";
     todoList.append(EmptyTodosEl);
   }
-}
+} //PUT (change done property)
+
 
 function onToggleDone(_x3) {
   return _onToggleDone.apply(this, arguments);
-}
+} //PUT change comment
+
 
 function _onToggleDone() {
   _onToggleDone = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee4(e) {
@@ -1279,27 +1281,125 @@ function _onToggleDone() {
   return _onToggleDone.apply(this, arguments);
 }
 
-function renderTodos(_x4) {
-  return _renderTodos.apply(this, arguments);
+var showUpdateInput = false;
+
+function onToggleUpdateInput(elems) {
+  var bool = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  console.log('toggle!');
+  showUpdateInput = bool;
+
+  if (showUpdateInput) {
+    elems.style.display = '';
+    elems.style.display = 'block';
+  } else if (!showUpdateInput) {
+    elems.style.display = '';
+    elems.style.display = 'none';
+  }
 }
 
-function _renderTodos() {
-  _renderTodos = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee5(data) {
-    var todos, todoTitles, doneToggleButtons;
+function changeTodoTitle(_x4) {
+  return _changeTodoTitle.apply(this, arguments);
+}
+
+function _changeTodoTitle() {
+  _changeTodoTitle = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee5(e) {
+    var _yield$axios4, data, todosTitleArray, todosTitle, todosIndex, todoCard, updateInputBox, todosUpdateCancelButton, todosIdArray, todosOrderArray, todosDoneArray;
+
     return _regeneratorRuntime.default.wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
             _context5.next = 2;
+            return axios({
+              url: 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
+              method: 'GET',
+              headers: {
+                'content-type': 'application/json',
+                'apikey': 'FcKdtJs202204',
+                'username': 'KimMyungSeong'
+              }
+            });
+
+          case 2:
+            _yield$axios4 = _context5.sent;
+            data = _yield$axios4.data;
+            console.log(e.target);
+            todosTitleArray = [];
+            data.map(function (item) {
+              return todosTitleArray.push(item.title);
+            });
+            todosTitle = e.target.parentNode.parentNode.parentNode.firstChild.nextSibling.textContent;
+            todosIndex = todosTitleArray.findIndex(function (title) {
+              return title === todosTitle;
+            });
+            todoCard = document.querySelectorAll('.todo')[todosIndex];
+            updateInputBox = document.querySelector('.todos--update-input-box');
+            todosUpdateCancelButton = document.querySelector('.todos--update-cancel-button');
+            todosUpdateCancelButton.addEventListener('click', function () {
+              onToggleUpdateInput(updateInputBox, false);
+            });
+            document.body.append(updateInputBox);
+            onToggleUpdateInput(updateInputBox);
+            todosIdArray = [];
+            data.map(function (item) {
+              return todosIdArray.push(item.id);
+            });
+            todosOrderArray = [];
+            data.map(function (item) {
+              return todosOrderArray.push(item.order);
+            });
+            todosDoneArray = [];
+            data.map(function (item) {
+              return todosDoneArray.push(item.done);
+            });
+            console.log(todosDoneArray[todosIndex]); //  await axios({
+            //   url: `https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/${todosIdArray[todosIndex]}`,
+            //   method: 'PUT',
+            //   headers: {
+            //     'content-type': 'application/json',
+            //     'apikey': 'FcKdtJs202204',
+            //     'username': "KimMyungSeong",
+            //   },
+            //   data: {
+            //     "title":todosTitle,
+            //     "order":todosOrderArray[todosIndex],
+            //     "done" : !todosDoneArray[todosIndex]
+            //   }
+            // })
+
+            readTodo();
+
+          case 23:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5);
+  }));
+  return _changeTodoTitle.apply(this, arguments);
+}
+
+function renderTodos(_x5) {
+  return _renderTodos.apply(this, arguments);
+}
+
+function _renderTodos() {
+  _renderTodos = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee6(data) {
+    var todos, todoTitles, doneToggleButtons;
+    return _regeneratorRuntime.default.wrap(function _callee6$(_context6) {
+      while (1) {
+        switch (_context6.prev = _context6.next) {
+          case 0:
+            _context6.next = 2;
             return data.map(function (todo) {
               return (
                 /* html */
-                "\n  <li class=\"todo\">\n  <div class=\"todos--title\">".concat(todo.title, "</div>\n  <span>(").concat(todo.createdAt.substr(2, 2), "-").concat(todo.createdAt.substr(5, 2), "-").concat(todo.createdAt.substr(8, 2), " ").concat(todo.createdAt.substr(11, 2), ":").concat(todo.createdAt.substr(14, 2), "\uBD84 \uC791\uC131)</span>\n  <div class=\"todos--button-wrapper\">\n  <div>\n  <button class=\"todos--delete-button\">\uC0AD\uC81C\uD558\uAE30</button>\n  <button class=\"todos--update-button\">\uD0C0\uD611\uD558\uAE30</button>\n  </div>\n  </div>\n  <div>").concat(todo.done === false ? "실천 중🔴" : "실천성공!🔵", "<button class='todos--done-toggle-button'>\uCCB4\uD06C</button></div>\n  </li>\n  ")
+                "\n  <li class=\"todo\">\n  <div class=\"todos--title\">".concat(todo.title, "</div>\n  <span>(").concat(todo.createdAt.substr(2, 2), "-").concat(todo.createdAt.substr(5, 2), "-").concat(todo.createdAt.substr(8, 2), " ").concat(todo.createdAt.substr(11, 2), ":").concat(todo.createdAt.substr(14, 2), "\uBD84 \uC791\uC131)</span>\n  <div class=\"todos--button-wrapper\">\n  <div>\n  <button class=\"todos--delete-button\">\uC0AD\uC81C\uD558\uAE30</button>\n  <button class=\"todos--update-button\">\uD0C0\uD611\uD558\uAE30</button>\n  </div>\n  </div>\n  <div>").concat(todo.done === false ? "노력 중🔴" : "해냈어요!🔵", "<button class='todos--done-toggle-button'>\uCCB4\uD06C</button></div>\n  </li>\n  ")
               );
             });
 
           case 2:
-            todos = _context5.sent;
+            todos = _context6.sent;
             todoTitles = todos.join('');
             todoList.innerHTML = todoTitles;
             application.append(todoList);
@@ -1312,10 +1412,10 @@ function _renderTodos() {
 
           case 10:
           case "end":
-            return _context5.stop();
+            return _context6.stop();
         }
       }
-    }, _callee5);
+    }, _callee6);
   }));
   return _renderTodos.apply(this, arguments);
 }
@@ -1332,24 +1432,27 @@ function loadButtons() {
   deleteButtonEls.forEach(function (deleteButtonEl) {
     return deleteButtonEl.addEventListener('click', deleteTodo);
   });
+  updateButtonEls.forEach(function (updateButtonEl) {
+    return updateButtonEl.addEventListener('click', changeTodoTitle);
+  });
 }
 
 var showDoneListButton = document.querySelector('#todos--remote-show-donelist-button');
-var showProgressingListButton = document.querySelector('#todos--remote-show-progressinglist-button');
+var showProgressingListButton = document.querySelector('#todos--remote-show-progressinglist-button'); //sort
 
-function onToggleList(_x5) {
+function onToggleList(_x6) {
   return _onToggleList.apply(this, arguments);
 }
 
 function _onToggleList() {
-  _onToggleList = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee6(bool) {
-    var _yield$axios4, data, filteredFalseData;
+  _onToggleList = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee7(bool) {
+    var _yield$axios5, data, filteredFalseData;
 
-    return _regeneratorRuntime.default.wrap(function _callee6$(_context6) {
+    return _regeneratorRuntime.default.wrap(function _callee7$(_context7) {
       while (1) {
-        switch (_context6.prev = _context6.next) {
+        switch (_context7.prev = _context7.next) {
           case 0:
-            _context6.next = 2;
+            _context7.next = 2;
             return axios({
               url: 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
               method: 'GET',
@@ -1361,8 +1464,8 @@ function _onToggleList() {
             });
 
           case 2:
-            _yield$axios4 = _context6.sent;
-            data = _yield$axios4.data;
+            _yield$axios5 = _context7.sent;
+            data = _yield$axios5.data;
             filteredFalseData = data.filter(function (item) {
               return item.done === bool;
             });
@@ -1372,10 +1475,10 @@ function _onToggleList() {
 
           case 8:
           case "end":
-            return _context6.stop();
+            return _context7.stop();
         }
       }
-    }, _callee6);
+    }, _callee7);
   }));
   return _onToggleList.apply(this, arguments);
 }
@@ -1414,7 +1517,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61293" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54894" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
