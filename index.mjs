@@ -252,8 +252,6 @@ async function onSubmitUpdateTodo(e, currentIdx, value) {
     todos[currentIdx] = {
       ...todos[currentIdx],
       title: updateInput.value,
-      order: todos[currentIdx].order,
-      done: todos[currentIdx].done
     }
     console.log(todos[currentIdx].id);
     
@@ -291,9 +289,7 @@ function changeTodoTitle(e) {
 
 updateForm.addEventListener('submit', (e) => onSubmitUpdateTodo(e,updateCurrentIdx,updateValue))
 
-  todosUpdateCancelButton.addEventListener('click', () => {
-    onToggleUpdateInput(false)
-  })
+todosUpdateCancelButton.addEventListener('click', () => {onToggleUpdateInput(false)})
 
 
 
@@ -326,8 +322,6 @@ function renderTodos(todos, str = "작성") {
   countTodoListChildNode();
   loadButtons();
 }
-
-
 
 const showAllListButton = document.querySelector('#todos--remote-show-Alllist-button');
 const deleteDoneListButton = document.querySelector('#todos--remote-remove-donelist-button');
