@@ -3,11 +3,15 @@ import  './app.mjs'
 import './main.css'
 const application = document.querySelector('#app-contents')
 const loadingEl = document.querySelector('#loading')
-
+const updateInput = document.querySelector('#todos--update-input');
+const todosUpdateCancelButton = document.querySelector('.todos--update-cancel-button')
+const updateForm = document.querySelector('#todos--update-form')
 let loading = true;
 let orderNumber = 0;
 
 
+const USER_NAME = 'KimMyungSeong'
+const API_KEY = 'FcKdtJs202204'
 
 const testArray = [];
 
@@ -279,48 +283,27 @@ function onToggleUpdateInput(elems,bool=true){
     elems.style.display = 'none';
   }
 }
-let updateValue;
+
 const updateInputBox = document.querySelector('.todos--update-input-box');
-function updateTodo(e){
- updateValue = e.target.value
- console.log(updateValue)
-}
 
 
 
-async function onSubmitUpdateTodo(e,todosTitle){
+async function onSubmitUpdateTodo(e,value){
   e.preventDefault()
-  const {data} = await axios({
-    url: 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
-    method: 'GET',
-    headers: {
-      'content-type': 'application/json',
-      'apikey': 'FcKdtJs202204',
-      'username': 'KimMyungSeong'
-    },
-  })
-    let todosTitleArray = [];
-    let todosIdArray = [];
-    let todosOrderArray = [];
-    let todosDoneArray = [];
-    data.map(item => todosTitleArray.push(item.title));
-    data.map(item => todosIdArray.push(item.id));
-    data.map(item => todosOrderArray.push(item.order))
-    data.map(item => todosDoneArray.push(item.done))
-    
-  const todosIndex = todosTitleArray.findIndex(title => title === todosTitle);
-  await axios({
-    url: `https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/${todosIdArray[todosIndex]}`,
+  
+  console.log(value)
+    await axios({
+    url: `https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/${value}`,
     method: 'PUT',
     headers: {
-      'content-type': 'application/json',
-      'apikey': 'FcKdtJs202204',
-      'username': "KimMyungSeong",
+      "content-type": 'application/json',
+      apikey: API_KEY,
+      username: USER_NAME,
     },
     data: {
-      "title":updateValue,
-      "order":todosOrderArray[todosIndex],
-      "done" : !todosDoneArray[todosIndex]
+      "title":updateInput.value,
+      "order": orderNumber,
+      "done" : false
     }
   })
 
@@ -332,15 +315,13 @@ async function onSubmitUpdateTodo(e,todosTitle){
 
 async function changeTodoTitle(e){
 
-    const todosTitle = e.target.parentNode.parentNode.parentNode.firstChild.nextSibling.textContent;
+  const {value} = e.target // value == todo.id
     
     // const todoCard = document.querySelectorAll('.todo')[todosIndex];  
-    const updateInput = document.querySelector('#todos--update-input');
-    const todosUpdateCancelButton = document.querySelector('.todos--update-cancel-button')
-    const updateForm = document.querySelector('#todos--update-form')
+    
     todosUpdateCancelButton.addEventListener('click',()=>{onToggleUpdateInput(updateInputBox,false)});
-    updateInput.addEventListener('change',updateTodo)
-    updateForm.addEventListener('submit',(e)=>onSubmitUpdateTodo(e,todosTitle))
+    
+    updateForm.addEventListener('submit',(e)=>onSubmitUpdateTodo(e,value))
     document.body.append(updateInputBox);
     onToggleUpdateInput(updateInputBox)
     
@@ -365,11 +346,11 @@ async function renderTodos(data,str="작성") {
   <span>(${todo.updatedAt.substr(2,2)}-${todo.updatedAt.substr(5,2)}-${todo.updatedAt.substr(8,2)} ${todo.updatedAt.substr(11,2)}:${todo.updatedAt.substr(14,2)}분 ${str})</span>
   <div class="todos--button-wrapper">
   <div>
-  <button class="todos--delete-button">삭제하기</button>
-  <button class="todos--update-button">타협하기</button>
+  <button class="todos--delete-button" value=${todo.id}>삭제하기</button>
+  <button class="todos--update-button" value=${todo.id}>타협하기</button>
   </div>
   </div>
-  <div>${todo.done === false ? "노력 중🔴" : "해냈어요!🔵"}<button class='todos--done-toggle-button'>체크</button></div>
+  <div>${todo.done === false ? "노력 중🔴" : "해냈어요!🔵"}<button class='todos--done-toggle-button' value=${todo.id}>체크</button></div>
   </li>
   `)
   const todoTitles = todos.join('');
@@ -460,4 +441,3 @@ showProgressingListButton.addEventListener('click',()=>onToggleList(false))
 
 
 readTodo()
-

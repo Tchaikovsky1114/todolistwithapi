@@ -1,50 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MUSTODO</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css">
-  <!-- <link rel="stylesheet" href="./index.css"> -->
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script type="module" src="/todolistwithapi.bbc6c1c7.js"></script>
-<link rel="stylesheet" href="/todolistwithapi.bbc6c1c7.css"></head>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUSTODO</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css">
+    <!-- <link rel="stylesheet" href="./index.css"> -->
+    <link rel="stylesheet" href="/index.e5980c4e.css"><script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/index.f2c0ec77.js" defer=""></script>
+  </head>
 
-
-<body>
-  <div class="todos--update-input-box ">
-    <div class="todos--update-input-inner">
-      <form id="todos--update-form" action="">
-    <textarea id="todos--update-input"></textarea>
-    <div>
-    <button>타협하기</button>
-    <button type="button" class="todos--update-cancel-button">취소하기</button>
-  </div>
-  </form>
-</div>
-  </div>
-  <div class="todos-count-wrapper"><span class="todos-count"></span>개의 Mustodo</div>
-  <form id="todo-form" action="">
-    <h1>MUSTODO</h1>
-  <label for="todos-input">못 지킬 계획은 쓰지 말자구..?</label>
-  <input id="todos-input" type="text" placeholder="쓰면 무조건 해야 됨..!">
-    <div>
-  <button>약속하기</button>
-  </div>
-</form>
-  <div class="todos--remote-button-group">
-    <h3>remote controller</h3>
-  <button id="todos--remote-remove-donelist-button">완료목록 삭제</button>
-  <button id="todos--remote-show-Alllist-button">전체보기</button>
-  <button id="todos--remote-show-progressinglist-button">진행 중인 목록</button>
-  <button id="todos--remote-show-donelist-button">완료된 목록</button>
-  
-  </div>
-<div id="loading">Loading.....</div>
-  <div id="app-contents">
-    <ul class="todos--list"></ul>
-  </div>
-  
-</body>
+  <body>
+    <div class="todos--update-input-box">
+      <div class="todos--update-input-inner">
+        <form id="todos--update-form" action="">
+          <textarea id="todos--update-input"></textarea>
+          <div>
+            <button>타협하기</button>
+            <button type="button" class="todos--update-cancel-button">
+              취소하기
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="todos-count-wrapper">
+      <span class="todos-count"></span>개의 Mustodo
+    </div>
+    <form id="todo-form" action="">
+      <h1>MUSTODO</h1>
+      <label for="todos-input">못 지킬 계획은 쓰지 말자구..?</label>
+      <input id="todos-input" type="text" placeholder="쓰면 무조건 해야 됨..!">
+      <div>
+        <button>약속하기</button>
+      </div>
+    </form>
+    <div class="todos--remote-button-group">
+      <h3>remote controller</h3>
+      <button id="todos--remote-remove-donelist-button">완료목록 삭제</button>
+      <button id="todos--remote-show-Alllist-button">전체보기</button>
+      <button id="todos--remote-show-progressinglist-button">
+        진행 중인 목록
+      </button>
+      <button id="todos--remote-show-donelist-button">완료된 목록</button>
+    </div>
+    <div id="loading">Loading.....</div>
+    <div id="app-contents">
+      <ul class="todos--list"></ul>
+    </div>
+  </body>
 </html>
