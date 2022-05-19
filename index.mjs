@@ -6,13 +6,20 @@ const loadingEl = document.querySelector('#loading')
 const updateInput = document.querySelector('#todos--update-input');
 const todosUpdateCancelButton = document.querySelector('.todos--update-cancel-button')
 const updateForm = document.querySelector('#todos--update-form')
+const todoList = document.querySelector('.todos--list')
 const todoFormEl = document.querySelector('#todo-form');
 const todosInputEl = document.querySelector('#todos-input');
 const todosCountEl = document.querySelector('.todos-count')
 const todosCountWrapper = document.querySelector('.todos-count-wrapper');
 const updateInputBox = document.querySelector('.todos--update-input-box');
-let loading = true;
+const deleteDoneListButton = document.querySelector('#todos--remote-remove-donelist-button');
+const showDoneListButton = document.querySelector('#todos--remote-show-donelist-button')
+const showProgressingListButton = document.querySelector('#todos--remote-show-progressinglist-button')
+
 let orderNumber = 0;
+let todos = [];
+let updateValue;
+let updateCurrentIdx;
 
 const API_URL = 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos';
 const API_KEY = 'FcKdtJs202204';
@@ -20,9 +27,12 @@ const USER_NAME = 'KimMyungSeong';
 
 
 todoFormEl.addEventListener('submit', (e) => onSubmitTodo(e, todosInputEl.value))
-
 todosInputEl.addEventListener('focus', onFocusPlaceholder)
 todosInputEl.addEventListener('blur', onBlurPlaceholder)
+updateForm.addEventListener('submit', (e) => onSubmitUpdateTodo(e,updateCurrentIdx,updateValue))
+todosUpdateCancelButton.addEventListener('click', () => {onToggleUpdateInput(false)})
+showDoneListButton.addEventListener('click', () => onToggleList(true))
+showProgressingListButton.addEventListener('click', () => onToggleList(false))
 
 
 async function onInit() {
@@ -31,6 +41,13 @@ async function onInit() {
   countTodos(todos);
 }
 
+function readTodo() {
+  renderTodos(todos);
+  countTodos(todos)
+}
+
+
+//get
 async function getTodo() {
   toggleLoading(true)
   try {
@@ -47,6 +64,8 @@ async function getTodo() {
   }
 }
 
+
+//post
 async function postTodo(todosValue, orderNumber) {
   toggleLoading(true)
   try {
@@ -67,53 +86,7 @@ async function postTodo(todosValue, orderNumber) {
   }
 }
 
-function onFocusPlaceholder() {
-  todosInputEl.setAttribute('placeholder', "진짜 무적권 해야 댐!");
-}
-
-function onBlurPlaceholder() {
-  todosInputEl.setAttribute('placeholder', "쓰면 무조건 해야 됨");
-}
-
-function countTodos(todos) {
-
-  if (todos.length > 0) {
-    todosCountEl.textContent = todos.length;
-    todosCountWrapper.style.display = 'block';
-  }
-  if (todos.length === 0) {
-    todosCountWrapper.style.display = 'none';
-  }
-}
-
-function toggleLoading(isLoading) {
-  if (isLoading) {
-    loadingEl.style.display = 'block';
-    application.style.display = 'none';
-  } else {
-    loadingEl.style.display = 'none';
-    application.style.display = 'block';
-  }
-}
-
-
-// validate
-function sameTodoValidation(array, value) {
-  const isValid = array.some(item => item.title === value)
-  return isValid;
-}
-
-// create Todo
-async function createTodo(todosValue) {
-  if (!sameTodoValidation(todos, todosValue)) {
-    postTodo(todosValue, todos.length + 1)
-  } else {
-    alert("똑같은 Todo가 존재합니다!")
-  }
-  readTodo()
-}
-
-
+//delete
 async function deleteTodo(e) {
   const {
     value
@@ -124,70 +97,18 @@ async function deleteTodo(e) {
       url: `${API_URL}/${value}`,
       method: 'DELETE'
     })
-
     return response;
   } catch (err) {
     alert(err)
   } finally {
     readTodo()
   }
-
 }
 
-function readTodo() {
-  renderTodos(todos);
-  countTodos(todos)
-}
-
-
-function onSubmitTodo(e, todosValue) {
-  e.preventDefault();
-  if (todosValue.length < 10) {
-    alert('누가 목표는 자세히 써야 실천 한다고 하더라고요(10자 이상 입력)')
-    return;
-  }
-  createTodo(todosValue)
-  readTodo()
-  todosInputEl.value = '';
-  todosInputEl.focus();
-}
-
-const todoList = document.querySelector('.todos--list')
-
-function countTodoListChildNode() {
-  if (!todoList.childElementCount) {
-
-    todoList.innerHTML = `<div>아무 계획도 없습니다...</div>`
-  }
-}
-let todos = [];
-
-async function request({
-  url = API_URL,
-  method = "",
-  data = {}
-}) {
-  const response = await axios({
-    url,
-    method,
-    headers: {
-      "content-type": "application/json",
-      apikey: API_KEY,
-      username: USER_NAME
-    },
-    data
-  })
-  return response;
-}
+//put
 
 async function putTodo(item) {
-  
-  const {
-    id,
-    title,
-    order,
-    done
-  } = item;
+  const {id,title,order,done} = item;
 
   try {
     const response = await request({
@@ -209,40 +130,64 @@ async function putTodo(item) {
     return response;
   } catch (err) {
     alert(err)
-  } finally {
-    
+  } finally {   
     readTodo()
   }
 }
 
-//change done property
-async function onToggleDone(e) {
-  const {
-    value
-  } = e.target
-  const currentItem = todos.find((item) => item.id === value)
-  putTodo(currentItem)
+// validate
+function sameTodoValidation(array, value) {
+  const isValid = array.some(item => item.title === value)
+  return isValid;
 }
 
-//PUT change comment
-
-
-function onToggleUpdateInput(bool = false) {
-
-  console.log('toggle!');
-  bool = bool;
-  if (bool) {
-    updateInputBox.style.display = '';
-    updateInputBox.style.display = 'block';
+// create Todo
+async function createTodo(todosValue) {
+  if (!sameTodoValidation(todos, todosValue)) {
+    postTodo(todosValue, todos.length + 1)
   } else {
-    updateInputBox.style.display = '';
-    updateInputBox.style.display = 'none';
+    alert("똑같은 Todo가 존재합니다!")
   }
+  readTodo()
+}
 
+function onSubmitTodo(e, todosValue) {
+  e.preventDefault();
+  if (todosValue.length < 10) {
+    alert('누가 목표는 자세히 써야 실천 한다고 하더라고요(10자 이상 입력)')
+    return;
+  }
+  createTodo(todosValue)
+  readTodo()
+  todosInputEl.value = '';
+  todosInputEl.focus();
+}
+
+function countTodoListChildNode() {
+  if (!todoList.childElementCount) {
+
+    todoList.innerHTML = `<div>아무 계획도 없습니다...</div>`
+  }
 }
 
 
-
+async function request({
+  url = API_URL,
+  method = "",
+  data = {}
+}) {
+  const response = await axios({
+    url,
+    method,
+    headers: {
+      "content-type": "application/json",
+      apikey: API_KEY,
+      username: USER_NAME
+    },
+    data
+  })
+  return response;
+}
 
 
 async function onSubmitUpdateTodo(e, currentIdx, value) {
@@ -273,13 +218,9 @@ async function onSubmitUpdateTodo(e, currentIdx, value) {
     updateInput.value = '';
   }
   readTodo()
-  
-
 }
 
-
-let updateValue;
-let updateCurrentIdx
+// modal-on function
 function changeTodoTitle(e) {
   const {value} = e.target // value == todo.id
   updateValue = value
@@ -287,16 +228,8 @@ function changeTodoTitle(e) {
   onToggleUpdateInput(true)
 };
 
-updateForm.addEventListener('submit', (e) => onSubmitUpdateTodo(e,updateCurrentIdx,updateValue))
-
-todosUpdateCancelButton.addEventListener('click', () => {onToggleUpdateInput(false)})
-
-
-
-
-
+// render function
 function renderTodos(todos, str = "작성") {
-  
   const todoElements = todos.map((todo) => /* html */ `
   <li class="todo">
     <div class="todos--title">${todo.title}</div>
@@ -313,7 +246,6 @@ function renderTodos(todos, str = "작성") {
   </li>
   `)
 
-
   const todoTitles = todoElements.join('');
   todoList.innerHTML = todoTitles;
   application.append(todoList);
@@ -323,15 +255,8 @@ function renderTodos(todos, str = "작성") {
   loadButtons();
 }
 
-const showAllListButton = document.querySelector('#todos--remote-show-Alllist-button');
-const deleteDoneListButton = document.querySelector('#todos--remote-remove-donelist-button');
-
-function showAllList(e) {
-  readTodo()
-}
 
 async function deleteDoneList(e) {
-
   try {
     const doneTodo = todos.filter(todo => todo.done === true);
     const todosIdArray = []
@@ -350,26 +275,10 @@ async function deleteDoneList(e) {
     alert(err)
   } finally {
     readTodo()
-   
   }
-
 }
 
 
-
-
-function loadButtons() {
-  const deleteButtonEls = document.querySelectorAll('.todos--delete-button');
-  const updateButtonEls = [...document.querySelectorAll('.todos--update-button')];
-  updateButtonEls.forEach((updateButtonEl) => updateButtonEl.addEventListener('click', changeTodoTitle))
-  showAllListButton.addEventListener('click', showAllList)
-  deleteDoneListButton.addEventListener('click', deleteDoneList)
-  deleteButtonEls.forEach((deleteButtonEl) => deleteButtonEl.addEventListener('click', deleteTodo))
-
-}
-
-const showDoneListButton = document.querySelector('#todos--remote-show-donelist-button')
-const showProgressingListButton = document.querySelector('#todos--remote-show-progressinglist-button')
 
 //sort by data.done value
 function onToggleList(bool) {
@@ -379,9 +288,60 @@ function onToggleList(bool) {
   todoList.innerHTML = '';
   renderTodos(filteredFalseData, "수정")
 }
+function onFocusPlaceholder() {
+  todosInputEl.setAttribute('placeholder', "진짜 무적권 해야 댐!");
+}
 
-showDoneListButton.addEventListener('click', () => onToggleList(true))
-showProgressingListButton.addEventListener('click', () => onToggleList(false))
+function onBlurPlaceholder() {
+  todosInputEl.setAttribute('placeholder', "쓰면 무조건 해야 됨");
+}
 
+function loadButtons() {
+  const deleteButtonEls = document.querySelectorAll('.todos--delete-button');
+  const updateButtonEls = [...document.querySelectorAll('.todos--update-button')];
+  updateButtonEls.forEach((updateButtonEl) => updateButtonEl.addEventListener('click', changeTodoTitle))
+  deleteDoneListButton.addEventListener('click', deleteDoneList)
+  deleteButtonEls.forEach((deleteButtonEl) => deleteButtonEl.addEventListener('click', deleteTodo))
+}
+
+function countTodos(todos) {
+  if (todos.length > 0) {
+    todosCountEl.textContent = todos.length;
+    todosCountWrapper.style.display = 'block';
+  }
+  if (todos.length === 0) {
+    todosCountWrapper.style.display = 'none';
+  }
+}
+
+function toggleLoading(isLoading) {
+  if (isLoading) {
+    loadingEl.style.display = 'block';
+    application.style.display = 'none';
+  } else {
+    loadingEl.style.display = 'none';
+    application.style.display = 'block';
+  }
+}
+
+
+async function onToggleDone(e) {
+  const {
+    value
+  } = e.target
+  const currentItem = todos.find((item) => item.id === value)
+  putTodo(currentItem)
+}
+
+function onToggleUpdateInput(bool = false) {
+  bool = bool;
+  if (bool) {
+    updateInputBox.style.display = '';
+    updateInputBox.style.display = 'block';
+  } else {
+    updateInputBox.style.display = '';
+    updateInputBox.style.display = 'none';
+  }
+}
 
 onInit()
