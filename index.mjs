@@ -17,7 +17,6 @@ let orderNumber = 0;
 const API_URL = 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos';
 const API_KEY = 'FcKdtJs202204';
 const USER_NAME = 'KimMyungSeong';
-const testArray = [];
 
 
 todoFormEl.addEventListener('submit', (e) => onSubmitTodo(e, todosInputEl.value))
@@ -248,7 +247,7 @@ function onToggleUpdateInput(bool = false) {
 
 async function onSubmitUpdateTodo(e, currentIdx, value) {
   e.preventDefault()
-
+  
   if (todos[currentIdx].id === value) {
     todos[currentIdx] = {
       ...todos[currentIdx],
@@ -257,6 +256,7 @@ async function onSubmitUpdateTodo(e, currentIdx, value) {
       done: todos[currentIdx].done
     }
     console.log(todos[currentIdx].id);
+    
     await axios({
       url: `${API_URL}/${todos[currentIdx].id}`,
       method: 'PUT',
@@ -275,34 +275,32 @@ async function onSubmitUpdateTodo(e, currentIdx, value) {
     updateInput.value = '';
   }
   readTodo()
-
+  
 
 }
 
 
-
-async function changeTodoTitle(e) {
-
+let updateValue;
+let updateCurrentIdx
+function changeTodoTitle(e) {
   const {value} = e.target // value == todo.id
-  const currentIdx = todos.findIndex(todo => todo.id === value)
+  updateValue = value
+  updateCurrentIdx = todos.findIndex(todo => todo.id === value)
   onToggleUpdateInput(true)
-
- 
-  
-  
-  updateForm.addEventListener('submit', (e) => onSubmitUpdateTodo(e, currentIdx, value))
 };
-todosUpdateCancelButton.addEventListener('click', () => {
-  onToggleUpdateInput(false)
-})
 
+updateForm.addEventListener('submit', (e) => onSubmitUpdateTodo(e,updateCurrentIdx,updateValue))
+
+  todosUpdateCancelButton.addEventListener('click', () => {
+    onToggleUpdateInput(false)
+  })
 
 
 
 
 
 function renderTodos(todos, str = "작성") {
-
+  
   const todoElements = todos.map((todo) => /* html */ `
   <li class="todo">
     <div class="todos--title">${todo.title}</div>
