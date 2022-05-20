@@ -15,7 +15,7 @@ const updateInputBox = document.querySelector('.todos--update-input-box');
 const deleteDoneListButton = document.querySelector('#todos--remote-remove-donelist-button');
 const showDoneListButton = document.querySelector('#todos--remote-show-donelist-button')
 const showProgressingListButton = document.querySelector('#todos--remote-show-progressinglist-button')
-
+const showAllListbutton = document.querySelector('#todos--remote-show-alllist-button')
 let orderNumber = 0;
 let todos = [];
 let updateValue;
@@ -33,7 +33,7 @@ updateForm.addEventListener('submit', (e) => onSubmitUpdateTodo(e,updateCurrentI
 todosUpdateCancelButton.addEventListener('click', () => {onToggleUpdateInput(false)})
 showDoneListButton.addEventListener('click', () => onToggleList(true))
 showProgressingListButton.addEventListener('click', () => onToggleList(false))
-
+showAllListbutton.addEventListener('click', readTodo)
 
 async function onInit() {
   await getTodo();
