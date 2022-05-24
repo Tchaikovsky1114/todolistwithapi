@@ -240,7 +240,7 @@ function renderTodos(todos, str = "작성") {
         <button class="btn btn-primary btn-sm todos--update-button" value=${todo.id}>타협하기</button>
      </div>
   </div>
-    <div>${todo.done === false ? "노력 중🔴" : "해냈어요!🔵"}
+    <div>${todo.done === false ? "🔴노력 중 💦" : "🔵해냈어요! ✨"}
       <button class='todos--done-toggle-button' value=${todo.id}>${todo.done ? '다시하기' : '완료!'}</button>
     </div>
   </li>

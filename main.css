@@ -56,6 +56,12 @@ body{
   left: 61%;
   top:30%;
 }
+.todos--update-button-wrapper{
+  display: flex;
+  justify-content: flex-end;
+  gap:5px;
+}
+
 h1{
   font-size: 34px;
 }
