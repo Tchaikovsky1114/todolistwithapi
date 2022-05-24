@@ -48,9 +48,9 @@ body{
 }
 .todos-count-wrapper{
   position: absolute;
-  
-  left: 61%;
+  left: 65%;
   top:30%;
+
 }
 .todos--update-button-wrapper{
   display: flex;
