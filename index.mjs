@@ -236,12 +236,12 @@ function renderTodos(todos, str = "작성") {
       <span>(${todo.updatedAt.substr(2,2)}-${todo.updatedAt.substr(5,2)}-${todo.updatedAt.substr(8,2)} ${todo.updatedAt.substr(11,2)}:${todo.updatedAt.substr(14,2)}분 ${str})</span>
     <div class="todos--button-wrapper">
       <div>
-       <button class="todos--delete-button" value=${todo.id}>삭제하기</button>
-        <button class="todos--update-button" value=${todo.id}>타협하기</button>
+       <button class="btn btn-danger btn-sm todos--delete-button" value=${todo.id}>삭제하기</button>
+        <button class="btn btn-primary btn-sm todos--update-button" value=${todo.id}>타협하기</button>
      </div>
   </div>
     <div>${todo.done === false ? "노력 중🔴" : "해냈어요!🔵"}
-      <button class='todos--done-toggle-button' value=${todo.id}>체크</button>
+      <button class='todos--done-toggle-button' value=${todo.id}>${todo.done ? '다시하기' : '완료!'}</button>
     </div>
   </li>
   `)
